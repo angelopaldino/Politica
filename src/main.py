@@ -12,10 +12,12 @@ def main():
 
     df = carica_dati_da_cartelle_annidate(spark, root_directory)
 
-    df.show(5, truncated=False)
+    df.show(5, truncate=False)
+
 
     spark.stop()
 
 if __name__ == "__main__":
     main()
+
 
