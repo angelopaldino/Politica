@@ -22,7 +22,6 @@ schema = StructType([
     StructField("screen_name", StringType(), True),
 ])
 
-
 def carica_dati_da_cartelle_annidate(spark: SparkSession, root_directory: str):
     percorsi_csv = []
 
