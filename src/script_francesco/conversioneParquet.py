@@ -2,6 +2,9 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pyspark.sql import SparkSession
 
+cartella_input_Angelo="C:\\Users\\angel\\OneDrive\\Desktop\\Dataset BigData"
+output_base_dirAngelo="C:\\Users\\angel\\OneDrive\\Desktop\\BigDataPolitica\\Politica\\data\\processed"
+
 def leggi_csv(spark_session: SparkSession, percorso_file: str):
 
     return (spark_session.read
@@ -16,12 +19,12 @@ def leggi_csv(spark_session: SparkSession, percorso_file: str):
 
 def multi_conversione(spark_session: SparkSession, max_workers=16):
     
-    cartella_input = "C:\\Users\\franc\\Desktop\\Dataset\\"
-    output_base_dir = "dataset\\"
+    #cartella_input = "C:\\Users\\franc\\Desktop\\Dataset\\"
+    #output_base_dir = "dataset\\"
     
-    os.makedirs(output_base_dir, exist_ok=True)
+    os.makedirs(output_base_dirAngelo, exist_ok=True)
     
-    file_paths = [os.path.join(cartella_input, f"tweet_USA_{i}_october.csv") for i in range(1, 32)]
+    file_paths = [os.path.join(cartella_input_Angelo, f"tweet_USA_{i}_october.csv") for i in range(1, 32)]
     
     all_dataframes = []
     
@@ -41,6 +44,6 @@ def multi_conversione(spark_session: SparkSession, max_workers=16):
     for df in all_dataframes:
         consolidated_df = consolidated_df.union(df)
     
-    consolidated_df.write.mode("overwrite").parquet(os.path.join(output_base_dir, ""))
+    consolidated_df.write.mode("overwrite").parquet(os.path.join(output_base_dirAngelo, ""))
     
     print("Conversione completata. Dataset Parquet consolidato creato.")

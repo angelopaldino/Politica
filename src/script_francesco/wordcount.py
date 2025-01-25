@@ -19,6 +19,9 @@ proper_names = set(nltk_names.words())
 
 valid_words = english_words.union(proper_names)
 
+cartella_input_Angelo="C:\\Users\\angel\\OneDrive\\Desktop\\Dataset BigData"
+output_base_dirAngelo="C:\\Users\\angel\\OneDrive\\Desktop\\BigDataPolitica\\Politica\\data\\processed"
+
 def is_valid_word(word):
     return word in valid_words
 
@@ -31,8 +34,8 @@ is_valid_word = udf(is_valid_word, BooleanType())
 
 def word_count(spark: SparkSession):
 
-    percorso_parquet = "dataset/"
-    cartella_output = "output/word_count_2_october"
+    percorso_parquet = output_base_dirAngelo
+    cartella_output = "C:\\Users\\angel\\OneDrive\\Desktop\\BigDataPolitica\\Politica\\data\\processed\\outputParquet"
 
     data = spark.read.parquet(percorso_parquet)
 

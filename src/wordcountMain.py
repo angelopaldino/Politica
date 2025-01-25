@@ -1,6 +1,7 @@
+from src.script_francesco.conversioneParquet import multi_conversione
 from pyspark.sql import SparkSession
-from wordcount import word_count
-from conversioneParquet import multi_conversione
+from src.script_francesco.wordcount  import word_count
+
 
 
 
@@ -22,7 +23,7 @@ def leggi_dataset(spark: SparkSession):
 
     df.printSchema()
     print("row_count: "+ str(df.count())+"\n")
-    df.show() 
+    df.show()
 
 
 
@@ -33,7 +34,7 @@ def main() :
     multi_conversione(spark_session)
     leggi_dataset(spark_session)
     word_count(spark_session)
-    
+
     spark_session.stop()
 
 
