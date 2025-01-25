@@ -8,9 +8,9 @@ def suddividi_per_giorno(input_path, output_path):
         .appName("BigDataProject") \
         .master("local[4]") \
         .config("spark.sql.shuffle.partitions", "100") \
-        .config("spark.executor.memory", "4g") \
-        .config("spark.driver.memory", "4g") \
-        .config("spark.sql.files.maxPartitionBytes", "128MB") \
+        .config("spark.executor.memory", "6g") \
+        .config("spark.driver.memory", "6g") \
+        .config("spark.sql.files.maxPartitionBytes", "64MB") \
         .getOrCreate()
 
     # Leggi i dati Parquet
@@ -35,8 +35,7 @@ def suddividi_per_giorno(input_path, output_path):
     # Scrivi i dati in Parquet, partizionati per giorno, senza sovrascrivere
     df.write.partitionBy("date").parquet(unique_output_path, mode="append")
 
-    # Facoltativo: se vuoi un singolo file Parquet (coalesce)
-    df.coalesce(1).write.parquet(unique_output_path, mode="append")
+
 
     # Ferma la sessione Spark
     spark.stop()

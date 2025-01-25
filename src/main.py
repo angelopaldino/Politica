@@ -11,7 +11,7 @@ def main():
     #PRIMA DI LANCIARE LE FUNZIONI DI SUDDIVISIONI COMMENTARE LO SPARKSESSIONBUILDER DEL MAIN DI QUESTOFILE
     #PERCHE' NEGLI SCRIPT DELLE SUDDIVISIONI VIENE CREATI LI IL SESSION BUILDER SPARK
 
-    visualizzazioneParquet()
+    #visualizzazioneParquet()
     #visualizzazioneDay(input_pathDay)
     #suddividi_per_giorno(input_directory, outputDays) #TODO RUN
     #suddividi_per_settimana(input_directory, outputWeeks) #TODO RUN
@@ -21,12 +21,12 @@ def main():
     #PASSO 1 CREARE UN DATASET CON TESTO E HASHTAGS
     #testoEHashtags(input_directory,outputTH)  #TODO RUN
     #PASSO 2 LANCIARE QUESTA
-    #process_tweets(outputTH, sentiment_dir)
+    #process_tweets(outputTH, sentiment_dir) #TODO RUN
 
 
 
 
-#CARTELLE ##############################################################
+#CARTELLE ANGELO ##############################################################
 outputTH = "C:\\Users\\angel\\OneDrive\\Desktop\\TestoEHashtags"
 sentiment_dir = "C:\\Users\\angel\\OneDrive\\Desktop\\SentimentAnalysis"
 root_directory = "C:\\Users\\angel\\OneDrive\\Desktop\\dataset politica\\"
@@ -37,6 +37,11 @@ outputDays = "C:\\Users\\angel\\OneDrive\\Desktop\\TemporalAnalysis"
 outputWeeks = "C:\\Users\\angel\\OneDrive\\Desktop\\WeeksAnalysis"
 outputHours = "C:\\Users\\angel\\OneDrive\\Desktop\\HoursAnalysis"
 ########################################
+
+
+####
+
+####
 
 if __name__ == "__main__":
     main()
