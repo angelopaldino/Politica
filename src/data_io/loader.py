@@ -22,6 +22,32 @@ schema = StructType([
     StructField("screen_name", StringType(), True),
 ])
 
+def testoEHashtags(input,output):
+
+    # Inizializza SparkSession
+    spark = SparkSession.builder \
+        .appName("ExtractTextHashtags") \
+        .master("local[*]") \
+        .getOrCreate()
+
+    # Carica il tuo dataset Parquet (sostituisci il percorso del file con quello corretto)
+    df = spark.read.parquet(input)
+
+    # Seleziona solo le colonne 'text' e 'hashtags'
+    df_selected = df.select("text", "hashtags")
+
+    # Mostra i primi 10 record per verificare l'estrazione
+    df_selected.show(10)
+
+    # Salva il risultato in un nuovo file Parquet
+    df_selected.write.parquet(output, mode="overwrite")
+
+    # Fermati la sessione di Spark
+    spark.stop()
+
+
+
+
 def carica_dati_da_cartelle_annidate(spark: SparkSession, root_directory: str):
     percorsi_csv = []
 
