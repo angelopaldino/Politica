@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from wordcount import word_count
+from backend.src.script_francesco.wordcount import word_count
 from conversioneParquet import multi_conversione
 
 

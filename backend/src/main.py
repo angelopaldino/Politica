@@ -1,19 +1,7 @@
-from pyspark.sql import SparkSession
-from src.analysis.temporalDay_analysis import suddividi_per_giorno
-from src.analysis.temporalHours import suddividi_per_fascia_oraria
-from src.analysis.temporalWeek_analysis import suddividi_per_settimana
-from src.data_io.loader import testoEHashtags
-from src.data_io.loaderSubSet import subset
-from src.get_data_for_date import get_data_for_day
-
-from src.sentiment_analysis import process_tweets
-from src.visualizzazioneparquet import visualizzazioneParquet, visualizzazioneDay
+from backend.src.Analisitemporale.get_data_for_date import get_data_for_day
 
 
 def main():
-    #PRIMA DI LANCIARE LE FUNZIONI DI SUDDIVISIONI COMMENTARE LO SPARKSESSIONBUILDER DEL MAIN DI QUESTOFILE
-    #PERCHE' NEGLI SCRIPT DELLE SUDDIVISIONI VIENE CREATI LI IL SESSION BUILDER SPARK
-
     #visualizzazioneParquet()
     #visualizzazioneDay(input_pathDay)
     #suddividi_per_giorno(input_directory, outputDays) #TODO RUN
@@ -22,7 +10,8 @@ def main():
     #subset(input_directory,outputSubset )
 
     #CHUNK STYLE ########################
-    get_data_for_day(input_directory,outputDays, "2020-10-15") #DO
+
+    get_data_for_day(input_directory,outputDays, "2020-10-15")
 
 
     ###############################

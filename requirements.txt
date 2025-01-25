@@ -1,4 +1,0 @@
-pyspark~=3.5.4
-nltk~=3.9.1
-pyarrow~=19.0.0
-wordcount~=1.0

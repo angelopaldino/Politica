@@ -4,7 +4,7 @@ import math
 import os
 
 
-def get_data_for_day(input_path, output_path,target_data ):
+def get_data_for_day(input_path, output_path, target_data):
     chunk_size_percent=2
     # Create a Spark session with configurations for partitioning and memory usage
     spark = SparkSession.builder \

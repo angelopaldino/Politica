@@ -3,7 +3,7 @@ import glob
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import regexp_replace, col, lower, explode, split, count
 
-from src.data_io.loader import carica_dati_da_cartelle_annidate
+from backend.src.data_io.loader import carica_dati_da_cartelle_annidate
 
 
 # Funzione per caricare solo la colonna "hashtags"
