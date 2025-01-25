@@ -3,6 +3,9 @@ from src.analysis.temporalDay_analysis import suddividi_per_giorno
 from src.analysis.temporalHours import suddividi_per_fascia_oraria
 from src.analysis.temporalWeek_analysis import suddividi_per_settimana
 from src.data_io.loader import testoEHashtags
+from src.data_io.loaderSubSet import subset
+from src.get_data_for_date import get_data_for_day
+
 from src.sentiment_analysis import process_tweets
 from src.visualizzazioneparquet import visualizzazioneParquet, visualizzazioneDay
 
@@ -16,6 +19,16 @@ def main():
     #suddividi_per_giorno(input_directory, outputDays) #TODO RUN
     #suddividi_per_settimana(input_directory, outputWeeks) #TODO RUN
     #suddividi_per_fascia_oraria(input_directory, outputHours) #TODO RUN
+    #subset(input_directory,outputSubset )
+
+    #CHUNK STYLE ########################
+    get_data_for_day(input_directory,outputDays, "2020-10-15") #DO
+
+
+    ###############################
+
+
+
 
     ##analisi del sentiment
     #PASSO 1 CREARE UN DATASET CON TESTO E HASHTAGS
@@ -36,6 +49,7 @@ output_directory = "C:\\Users\\angel\\OneDrive\\Desktop\\BigDataPolitica\\Politi
 outputDays = "C:\\Users\\angel\\OneDrive\\Desktop\\TemporalAnalysis"
 outputWeeks = "C:\\Users\\angel\\OneDrive\\Desktop\\WeeksAnalysis"
 outputHours = "C:\\Users\\angel\\OneDrive\\Desktop\\HoursAnalysis"
+outputSubset = "C:\\Users\\angel\\OneDrive\\Desktop\\SubsetParquet"
 ########################################
 
 
