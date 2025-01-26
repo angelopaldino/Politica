@@ -3,10 +3,9 @@ from pyspark.sql.functions import col, date_format
 import math
 import os
 
-
 def get_data_for_day(input_path, output_path, target_data):
-    chunk_size_percent=2
-    # Create a Spark session with configurations for partitioning and memory usage
+    chunk_size_percent = 2
+    # Creazione della sessione Spark con configurazioni per il partizionamento e l'uso della memoria
     spark = SparkSession.builder \
         .appName("BigDataProject") \
         .master("local[4]") \
@@ -14,53 +13,74 @@ def get_data_for_day(input_path, output_path, target_data):
         .config("spark.sql.files.maxPartitionBytes", "128MB") \
         .getOrCreate()
 
-    # Get list of Parquet files in the input path
+    # Verifica che il percorso di input esista
+    if not os.path.exists(input_path):
+        print(f"Errore: Il percorso di input non esiste: {input_path}")
+        spark.stop()
+        return None
+
+    # Ottieni la lista dei file Parquet nel percorso di input
     try:
         input_files = [os.path.join(input_path, f) for f in os.listdir(input_path) if f.endswith('.parquet')]
+        if not input_files:
+            print(f"Errore: Nessun file Parquet trovato nel percorso di input: {input_path}")
+            spark.stop()
+            return None
     except FileNotFoundError:
-        print(f"Error: Input path {input_path} not found.")
+        print(f"Errore: Percorso di input non trovato: {input_path}")
         spark.stop()
-        return
+        return None
 
     total_files = len(input_files)
-    chunk_size = math.ceil(total_files * (chunk_size_percent / 100.0)) # Calculate chunk size
+    chunk_size = math.ceil(total_files * (chunk_size_percent / 100.0))  # Calcola la dimensione del chunk
 
-    print(f"Total files in dataset: {total_files}")
-    print(f"Chunk size (percentage): {chunk_size}")
+    print(f"Totale file nel dataset: {total_files}")
+    print(f"Dimensione del chunk (percentuale): {chunk_size}")
 
-    # Calculate number of chunks
+    # Calcola il numero di chunk
     num_chunks = math.ceil(total_files / chunk_size)
-    print(f"Number of chunks to process: {num_chunks}")
+    print(f"Numero di chunk da processare: {num_chunks}")
 
-    # Process data in chunks
+    # Processa i dati in chunk
     for i in range(num_chunks):
-        # Extract file paths for the current chunk
+        # Estrai i file del chunk corrente
         start_index = i * chunk_size
         end_index = min((i + 1) * chunk_size, total_files)
         chunk_files = input_files[start_index:end_index]
-        print(f"Processing chunk {i+1}/{num_chunks}, files from {start_index} to {end_index}")
+        print(f"Processando chunk {i+1}/{num_chunks}, file da {start_index} a {end_index}")
 
         try:
-            # Read chunk files into a DataFrame
+            # Leggi i file del chunk in un DataFrame
             df_chunk = spark.read.parquet(*chunk_files)
 
-            # Apply transformations (filter for date and format created_at)
+            # Applica le trasformazioni (filtra per data e formatta created_at)
             df_transformed = df_chunk.withColumn("created_at_str", date_format(col("created_at"), "yyyy-MM-dd")) \
                 .filter(col("created_at_str") == target_data)
 
-            # Write transformed chunk DataFrame to Parquet
-            df_transformed.write.parquet(f"{output_path}/chunk_{i+1}.parquet", mode="overwrite")
+            # Scrivi il DataFrame trasformato nel percorso di output
+            output_chunk_path = os.path.join(output_path, f"chunk_{i+1}.parquet")
+            df_transformed.write.parquet(output_chunk_path, mode="overwrite")
+            print(f"Scrittura del chunk {i+1} completata: {output_chunk_path}")
         except Exception as e:
-            print(f"Error processing chunk {i+1}: {e}")
-    # Carica il file Parquet
-    parquet_files = [os.path.join(output_path, f) for f in os.listdir(output_path) if f.endswith(".parquet")]
+            print(f"Errore nel processare il chunk {i+1}: {e}")
 
-    # Carica tutti i file in un unico DataFrame
-    df = spark.read.parquet(*parquet_files)
+    # Carica tutti i file Parquet generati in un unico DataFrame
+    try:
+        parquet_files = [os.path.join(output_path, f) for f in os.listdir(output_path) if f.endswith(".parquet")]
+        if not parquet_files:
+            print(f"Errore: Nessun file Parquet trovato nel percorso di output: {output_path}")
+            spark.stop()
+            return None
 
-    # Visualizza il DataFrame completo
-    df.show()
-    return df
+        # Carica i file Parquet in un DataFrame
+        df = spark.read.parquet(*parquet_files)
+        df.show()  # Visualizza il DataFrame completo
+        return df
+
+    except Exception as e:
+        print(f"Errore nel caricare i file Parquet dal percorso di output: {e}")
+        spark.stop()
+        return None
 
 
 
