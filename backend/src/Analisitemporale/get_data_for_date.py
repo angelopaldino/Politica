@@ -60,7 +60,8 @@ def get_data_for_day(input_path, output_path, target_data):
 
     # Visualizza il DataFrame completo
     df.show()
-    spark.stop()
+    return df
+
 
 
 

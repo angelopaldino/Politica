@@ -1,24 +1,19 @@
+import sys
+import os
 
-import streamlit as st
-
-##DIRECTORY ANGELO
-input_directory = "C:\\Users\\angel\\OneDrive\\Desktop\\Dataset parquet\\dataset\\dataset"
-##
-def app():
-    st.write("Benvenuto")
+# Aggiungi la directory principale del progetto a sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
 
-    # Titolo dell'applicazione
-    st.title("Visualizzazione Dati Twitter")
-
-
-def display_home():
-    st.title("Home Page")
-    st.write("Benvenuto nella pagina iniziale del nostro progetto.")
+from Politica.frontend.src.analisitemporale.getDays import getDays
 
 
 def main():
-    app()
+    getDays()
+
+
 
 if __name__ == "__main__":
     main()
+
+
