@@ -1,9 +1,0 @@
-pyspark~=3.5.4
-nltk~=3.9.1
-pyarrow~=19.0.0
-wordcount~=1.0
-streamlit==1.18.0
-pandas==1.5.0
-matplotlib==3.6.0
-plotly==5.0.0
-altair==4.0.0

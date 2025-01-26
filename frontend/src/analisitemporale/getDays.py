@@ -1,30 +1,26 @@
 from datetime import datetime
 import streamlit as st
 from Politica.backend.src.Analisitemporale.get_data_for_date import get_data_for_day
-import os
-
 
 def getDays():
     st.title("Analisi dei Tweet per Giorno")
 
     # Campo di input per la data
     target_data = st.text_input("Inserisci una data (yyyy-mm-dd):")
-    chunk_size = st.slider("Seleziona il numero di righe da visualizzare per volta", min_value=5, max_value=50, step=5, value=50)
+    chunk_size = st.slider("Seleziona il numero di righe da visualizzare per volta", min_value=5, max_value=50, step=5, value=10)
 
     # Opzione per selezionare cosa visualizzare
     view_option = st.selectbox("Cosa vuoi visualizzare?", ["Tweet del giorno", "Hashtags", "Numero di retweet", "All"])
 
     # Percorsi dei dati
-    input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Dataset parquet\\dataset\\dataset"
+    input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Datasetparquet\\dataset\\dataset"
     output_path = "C:\\Users\\angel\\OneDrive\\Desktop\\TemporalAnalysis"
 
-    # Verifica che i percorsi siano validi
-    if not os.path.exists(input_path):
-        st.error(f"Il percorso di input non esiste: {input_path}")
-        return
-    if not os.path.exists(output_path):
-        st.error(f"Il percorso di output non esiste: {output_path}")
-        return
+    # Variabili di sessione per risultati e indice
+    if "result_df" not in st.session_state:
+        st.session_state.result_df = None
+    if "current_index" not in st.session_state:
+        st.session_state.current_index = 0
 
     # Bottone per avviare l'elaborazione
     if st.button("Analizza"):
@@ -50,30 +46,40 @@ def getDays():
         elif result_df.count() == 0:
             st.warning("Nessun dato trovato per questa data.")
         else:
-            # Filtra i dati in base alla scelta dell'utente
-            if view_option == "Tweet del giorno":
-                result_df = result_df.select("created_at", "text")  # Colonne per i tweet
-            elif view_option == "Hashtags":
-                result_df = result_df.select("created_at", "hashtags")  # Colonne per gli hashtag
-            elif view_option == "Numero di retweet":
-                result_df = result_df.select("retweet_count")
-            elif view_option == "All":
-                result_df = result_df.select("created_at", "text", "hashtags", "retweet_count")  # Tutti i dati
+            # Salva il risultato nella sessione
+            st.session_state.result_df = result_df
+            st.session_state.current_index = 0  # Reset dell'indice
 
-            # Mostra i dati
-            st.write(f"Visualizzazione dei dati per {target_data_str} ({view_option}):")
-            total_rows = result_df.count()
+    # Mostra i dati salvati
+    if st.session_state.result_df is not None:
+        result_df = st.session_state.result_df
 
-            # Mostra il primo chunk
-            result_df_pandas = result_df.limit(chunk_size).toPandas()
-            st.dataframe(result_df_pandas)
+        # Filtra i dati in base alla scelta dell'utente
+        if view_option == "Tweet del giorno":
+            result_df = result_df.select("created_at", "text")
+        elif view_option == "Hashtags":
+            result_df = result_df.select("created_at", "hashtags")
+        elif view_option == "Numero di retweet":
+            result_df = result_df.select("retweet_count")
+        elif view_option == "All":
+            result_df = result_df.select("created_at", "text", "hashtags", "retweet_count")
 
-            # Gestione del caricamento dei dati successivi
-            if total_rows > chunk_size:
-                st.write(f"Ci sono più dati da visualizzare (totale righe: {total_rows}).")
-                if st.button("Carica più dati"):
-                    start_index = chunk_size
-                    remaining_df = result_df.limit(start_index, total_rows).toPandas()
-                    st.dataframe(remaining_df)
+        # Calcola il totale e l'indice corrente
+        total_rows = result_df.count()
+        start_index = st.session_state.current_index
+        end_index = min(start_index + chunk_size, total_rows)
+
+        # Carica il chunk corrente e rimuove valori NA
+        result_df_pandas = result_df.limit(end_index).toPandas()
+        result_df_pandas = result_df_pandas.iloc[start_index:end_index]
+        result_df_pandas = result_df_pandas.dropna(how="any")
+
+        # Mostra i dati in una tabella
+        st.dataframe(result_df_pandas, use_container_width=True)
+
+        # Aggiorna l'indice corrente
+        if end_index < total_rows:
+            if st.button("Carica più dati"):
+                st.session_state.current_index = end_index
 
 
