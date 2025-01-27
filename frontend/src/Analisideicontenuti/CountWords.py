@@ -8,7 +8,6 @@ def Tweets():
     st.markdown("<h1 style='text-align: center; color: #4CAF50;'>Analisi dei Tweet per Candidati</h1>", unsafe_allow_html=True)
     input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Datasetparquet\\dataset\\dataset"
     # Aggiungere un'immagine di benvenuto
-    #st.image("https://upload.wikimedia.org/wikipedia/commons/4/47/Trump_vs_Biden_2020.svg", use_column_width=True)
 
     # Descrizione del progetto
     st.markdown("""
