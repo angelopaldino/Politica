@@ -1,7 +1,8 @@
 import streamlit as st
-import matplotlib.pyplot as plt
-from collections import defaultdict
-
+from Politica.frontend.src.Analisideicontenuti.CountWords import Tweets
+from Politica.frontend.src.Analisidelsentiment.sentimentAnalysis import analisi, plot_pie_chart
+from Politica.frontend.src.analisitemporale.getDays import getDays
+from Politica.frontend.src.Analisidegliutenti.user_activity import user_activity
 from Politica.frontend.src.Analisideicontenuti.temaPerHashtags import analyze_hashtags, themes_keywords
 
 
@@ -43,17 +44,13 @@ def home():
     # Visualizza il grafico a torta
     plot_pie_chart(theme_counts)
 
-# Import delle altre funzioni
-from Politica.frontend.src.Analisideicontenuti.CountWords import Tweets
-from Politica.frontend.src.Analisidelsentiment.sentimentAnalysis import analisi, plot_pie_chart
-from Politica.frontend.src.analisitemporale.getDays import getDays
 
 # Main Streamlit
 def main():
     # Menu di navigazione nel sidebar
     menu = st.sidebar.selectbox(
         "Scegli la funzionalità",
-        ["Home", "Analisi Tweets", "Analisi Sentiment", "Tweets del giorno"]
+        ["Home", "Analisi Tweets", "Analisi Sentiment", "Tweets del giorno", "Analisi Attività Utente"]
     )
 
     # Logica per caricare la pagina selezionata
@@ -69,6 +66,8 @@ def main():
     elif menu == "Tweets del giorno":
         getDays()  # Chiama la funzione corrispondente nel file `getDays.py`
 
+    elif menu == "Analisi Attività Utente":
+        user_activity()  # Chiama la funzione che mostra l'attività utente
+
 if __name__ == "__main__":
     main()
-

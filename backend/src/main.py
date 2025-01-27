@@ -1,12 +1,14 @@
+from Politica.backend.src.Analisidegliutenti.frequenzatweetutente import analyze_user_activity
 from Politica.backend.src.Analisitemporale.get_data_for_date import get_data_for_day
 from Politica.backend.src.data_io.visualizzazioneparquet import visualizzazioneParquet
 
 
 
 def main():
-    print("Backend")
+    #print("Backend")
     #CHUNK STYLE ########################
     #get_data_for_day(input_directory,outputDays, "2020-10-10")
+    analyze_user_activity(input_directory, outputDays)
 
 
     ###############################

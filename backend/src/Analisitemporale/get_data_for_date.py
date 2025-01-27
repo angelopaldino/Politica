@@ -3,8 +3,6 @@ from pyspark.sql.functions import col, date_format
 import math
 import os
 
-from pyspark.sql.types import StructField, StringType, StructType
-
 
 def get_data_for_day(input_path, output_path, target_data):
     chunk_size_percent = 2

@@ -8,7 +8,6 @@ themes_keywords = {
     "tech": ["tech", "AI", "machinelearning", "robotics", "iot", "cloud", "5G", "blockchain"],
     "covid": ["covid", "pandemic", "coronavirus", "lockdown", "quarantine", "vaccination"],
     "health": ["health", "fitness", "medicine", "wellness", "mentalhealth", "nutrition", "exercise"],
-    # Puoi aggiungere altri temi qui
 }
 
 # Funzione per determinare il tema di un hashtag
