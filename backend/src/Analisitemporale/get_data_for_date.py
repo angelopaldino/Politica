@@ -3,11 +3,14 @@ from pyspark.sql.functions import col, date_format
 import math
 import os
 
+from pyspark.sql.types import StructField, StringType, StructType
+
+
 def get_data_for_day(input_path, output_path, target_data):
     chunk_size_percent = 2
     # Creazione della sessione Spark con configurazioni per il partizionamento e l'uso della memoria
     spark = SparkSession.builder \
-        .appName("BigDataProject") \
+        .appName("Get DATA for DATA") \
         .master("local[4]") \
         .config("spark.sql.shuffle.partitions", "100") \
         .config("spark.sql.files.maxPartitionBytes", "128MB") \
