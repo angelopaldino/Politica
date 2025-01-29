@@ -2,11 +2,10 @@ import math
 import os
 import pandas as pd
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import count, col, max
-
+from pyspark.sql.functions import count, col, max, first
 
 def analyze_user_activity(input_path, output_path):
-    # Creazione della sessione Spark
+    # Creazione della sessione Spark con configurazioni ottimizzate
     spark = SparkSession.builder \
         .appName("User Activity Analysis") \
         .master("local[4]") \
@@ -33,13 +32,11 @@ def analyze_user_activity(input_path, output_path):
         return None
 
     total_files = len(input_files)
-    chunk_size_percent = 2  # Impostato per esempio, puoi cambiarlo
-    chunk_size = math.ceil(total_files * (chunk_size_percent / 100.0))  # Calcola la dimensione del chunk
-
-    # Calcola il numero di chunk
+    chunk_size = 2  # Per esempio, 100 file per chunk
     num_chunks = math.ceil(total_files / chunk_size)
+    start_row=0
+    num_rows=15
     print(f"Totale file nel dataset: {total_files}")
-    print(f"Dimensione del chunk (percentuale): {chunk_size}")
     print(f"Numero di chunk da processare: {num_chunks}")
 
     # Processa i dati in chunk
@@ -62,31 +59,22 @@ def analyze_user_activity(input_path, output_path):
             )
 
             # Analisi dei dati:
-            # 1. Numero di tweet per utente
-            user_tweet_counts = df_chunk.groupBy("user_id_str").agg(count("tweet_id").alias("tweet_count"))
-
-            # 2. Tweet più retwittati per ogni utente
-            most_retweeted = df_chunk.groupBy("user_id_str").agg(max("retweet_count").alias("max_retweet_count"))
-            most_retweeted = df_chunk.join(most_retweeted, ["user_id_str"], "inner").filter(col("retweet_count") == col("max_retweet_count"))
-
-            # 3. Tweet più favoriti per ogni utente
-            most_favorited = df_chunk.groupBy("user_id_str").agg(max("favorite_count").alias("max_favorite_count"))
-            most_favorited = df_chunk.join(most_favorited, ["user_id_str"], "inner").filter(col("favorite_count") == col("max_favorite_count"))
+            user_activity = df_chunk.groupBy("user_id_str").agg(
+                count("tweet_id").alias("tweet_count"),  # Conteggio dei tweet per utente
+                max("retweet_count").alias("max_retweet_count"),
+                max("favorite_count").alias("max_favorite_count"),
+                first("text").alias("first_tweet_text")  # Aggiungi il testo del primo tweet per ogni utente
+            )
 
             # Scrivi i risultati in file separati per ciascun dataframe
-            output_user_tweet_counts = os.path.join(output_path, f"chunk_{i+1}_user_tweet_counts.parquet")
-            output_most_retweeted = os.path.join(output_path, f"chunk_{i+1}_most_retweeted.parquet")
-            output_most_favorited = os.path.join(output_path, f"chunk_{i+1}_most_favorited.parquet")
-
-            user_tweet_counts.write.parquet(output_user_tweet_counts, mode="overwrite")
-            most_retweeted.write.parquet(output_most_retweeted, mode="overwrite")
-            most_favorited.write.parquet(output_most_favorited, mode="overwrite")
+            output_result = os.path.join(output_path, f"chunk_{i+1}_user_activity.parquet")
+            user_activity.write.parquet(output_result, mode="overwrite")
             print(f"Scrittura dei dati nel chunk {i+1} completata.")
 
         except Exception as e:
             print(f"Errore nel processare il chunk {i+1}: {e}")
 
-    # Carica tutti i file Parquet generati in un unico DataFrame
+    # Carica solo i file richiesti dal percorso di output
     try:
         parquet_files = [os.path.join(output_path, f) for f in os.listdir(output_path) if f.endswith(".parquet")]
         if not parquet_files:
@@ -96,12 +84,21 @@ def analyze_user_activity(input_path, output_path):
 
         # Carica i file Parquet in un DataFrame finale
         final_df = spark.read.parquet(*parquet_files)
-        # Converti in Pandas DataFrame per Streamlit
-        final_df_pd = final_df.toPandas()
 
-        # Visualizza i dati nel terminale (per debug)
-        print(final_df_pd.head())
+        # Seleziona solo le colonne necessarie
+        final_df_filtered = final_df.select("user_id_str", "tweet_count", "max_retweet_count", "max_favorite_count", "first_tweet_text")
 
+        # Calcola l'indice di inizio e fine in base alla paginazione
+        final_df_filtered = final_df_filtered.orderBy("user_id_str").limit(start_row + num_rows).offset(start_row)
+
+        # Converte in Pandas DataFrame per Streamlit
+        # Usa toPandas() per convertire il DataFrame Spark in Pandas
+        final_df_pd = final_df_filtered.toPandas()
+
+        print("Esempio di dati nel DataFrame Pandas:", final_df_pd.head())
+        print("Colonne disponibili:", final_df_pd.columns)
+
+        # Restituisci il DataFrame Pandas
         return final_df_pd
 
     except Exception as e:

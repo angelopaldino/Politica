@@ -13,7 +13,7 @@ def getDays():
     view_option = st.selectbox("Cosa vuoi visualizzare?", ["Tweet del giorno", "Hashtags", "Numero di retweet", "All"])
 
     # Percorsi dei dati
-    input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Datasetparquet\\dataset\\dataset"
+    input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\subsetdataset\\dataset_sottoinsieme\\dataset_sottoinsieme"
     output_path = "C:\\Users\\angel\\OneDrive\\Desktop\\TemporalAnalysis"
 
     # Variabili di sessione per risultati e indice

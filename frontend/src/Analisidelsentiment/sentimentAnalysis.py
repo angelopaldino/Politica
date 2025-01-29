@@ -29,7 +29,7 @@ def analisi():
     selected_candidate = st.selectbox("Seleziona un candidato", candidates)
 
     # Percorsi dei dati
-    input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Datasetparquet\\dataset\\dataset"
+    input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\subsetdataset\\dataset_sottoinsieme\\dataset_sottoinsieme"
     output_path = "C:\\Users\\angel\\OneDrive\\Desktop\\SentimentAnalysis"
 
     if st.button("Esegui Analisi"):

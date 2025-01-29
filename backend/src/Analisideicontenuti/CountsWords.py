@@ -5,7 +5,6 @@ import math
 import os
 from pyspark.sql import SparkSession
 import nltk
-nltk.download('stopwords')
 from nltk.corpus import stopwords
 
 # Funzione per rimuovere i simboli HTML e normalizzare il testo
@@ -105,6 +104,5 @@ def filter_tweets_by_candidate(df, candidate_keywords):
 
     return filtered_df
 
-# Esempio di utilizzo
-input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Datasetparquet\\dataset\\dataset"
+
 

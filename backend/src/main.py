@@ -8,15 +8,15 @@ def main():
     #print("Backend")
     #CHUNK STYLE ########################
     #get_data_for_day(input_directory,outputDays, "2020-10-10")
-    analyze_user_activity(input_directory, outputDays)
+    analyze_user_activity(input_sub, output)
 
 
     ###############################
 
 #CARTELLE ANGELO ##############################################################
-
+input_sub = "C:\\Users\\angel\\OneDrive\\Desktop\\subsetdataset\\dataset_sottoinsieme\\dataset_sottoinsieme"
 input_directory = "C:\\Users\\angel\\OneDrive\\Desktop\\Datasetparquet\\dataset\\dataset"
-outputDays = "C:\\Users\\angel\\OneDrive\\Desktop\\TemporalAnalysis"
+output = "C:\\Users\\angel\\OneDrive\\Desktop\\TemporalAnalysis"
 
 ########################################
 
