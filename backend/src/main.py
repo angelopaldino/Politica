@@ -6,10 +6,10 @@ from Politica.backend.src.data_io.visualizzazioneparquet import visualizzazioneP
 
 
 def main():
-    #print("Backend")
+    print("Backend")
     #CHUNK STYLE ########################
-    #get_data_for_day(input_directory,outputDays, "2020-10-10")
-    analyze_user_activity(input_sub, output)
+    #get_data_for_day(input_sub,output, "2020-10-10")
+    #analyze_user_activity(input_sub, output)
 
 
     ###############################

@@ -1,4 +1,3 @@
-from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, date_format
 import math
 import os
@@ -6,7 +5,7 @@ import streamlit as st
 
 
 def get_data_for_day(input_path, output_path, target_data):
-    chunk_size_percent = 2
+    chunk_size_percent = 5
     # Creazione della sessione Spark con configurazioni per il partizionamento e l'uso della memoria
     if "spark" not in st.session_state:
         raise RuntimeError("Errore: SparkSession non è attiva. Premi 'Avvia App' per iniziarla.")

@@ -1,13 +1,12 @@
 import streamlit as st
 import matplotlib.pyplot as plt
-import pandas as pd
-
-from Politica.backend.src.analisidelsentiment.AnalyzeSentimet import process_in_chunks
+from Politica.backend.src.analisidelsentiment.sentiment import process_data2
 
 # Lista dei candidati
 candidates = [
-    "Joe Biden", "Donald Trump", "Bernie Sanders", "Elizabeth Warren", "Kamala Harris", "Pete Buttigieg"
-, 'Cory Booker','Andrew Yang','Beto O’Rourke','']
+    "Joe Biden", "Donald Trump", "Bernie Sanders", "Elizabeth Warren", "Kamala Harris",
+    "Pete Buttigieg", "Cory Booker", "Andrew Yang", "Beto O’Rourke"
+]
 
 # Funzione per visualizzare il grafico a torta
 def plot_pie_chart(sentiment_percentages):
@@ -20,7 +19,7 @@ def plot_pie_chart(sentiment_percentages):
 
     st.pyplot(fig)
 
-def analisi():
+def analisi2():
     # Interfaccia utente
     st.title("Analisi del Sentiment sui Tweet")
     st.write("Scegli un candidato per eseguire l'analisi del sentiment sui tweet.")
@@ -28,9 +27,8 @@ def analisi():
     # Menu a tendina per scegliere il candidato
     selected_candidate = st.selectbox("Seleziona un candidato", candidates)
 
-    # Percorsi dei dati
+    # Percorso del dataset
     input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Datasetparquet\\dataset\\dataset"
-    output_path = "C:\\Users\\angel\\OneDrive\\Desktop\\SentimentAnalysis"
 
     if st.button("Esegui Analisi"):
         st.write(f"Analizzando i tweet per {selected_candidate}...")
@@ -39,7 +37,7 @@ def analisi():
         candidate_keywords = [selected_candidate.lower(), selected_candidate.split()[1].lower()]
 
         # Esegui l'analisi del sentiment
-        sentiment_percentages = process_in_chunks(input_path, output_path, candidate_keywords)
+        sentiment_percentages = process_data2(input_path, candidate_keywords)
 
         if sentiment_percentages:
             st.write(f"Percentuali di sentiment per {selected_candidate}:")

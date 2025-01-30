@@ -1,9 +1,6 @@
 import math
 import os
 import streamlit as st
-
-import pandas as pd
-from pyspark.sql import SparkSession
 from pyspark.sql.functions import count, col, max, first
 
 def analyze_user_activity(input_path, output_path):

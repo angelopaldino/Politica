@@ -1,7 +1,8 @@
 import streamlit as st
-from Politica.backend.src.Analisidegliutenti.frequenzatweetutente import analyze_user_activity
+from Politica.backend.src.Analisidegliutenti.frequenze import analyze_user_activity2
 
-def user_activity():
+
+def user_activity2():
     # Titolo della pagina
     st.title("Analisi Attività Utente")
 
@@ -23,7 +24,7 @@ def user_activity():
             output_path = "C:\\Users\\angel\\OneDrive\\Desktop\\TemporalAnalysis"
 
             # Chiamata al backend per analizzare l'attività utente
-            user_activity_df = analyze_user_activity(input_path, output_path)
+            user_activity_df = analyze_user_activity2(input_path, output_path)
 
             # Verifica se l'analisi è riuscita
             if user_activity_df is not None:

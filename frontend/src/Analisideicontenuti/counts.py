@@ -1,9 +1,9 @@
 import streamlit as st
 
-from Politica.backend.src.Analisideicontenuti.CountsWords import count_words_for_candidate_in_chunks
+from Politica.backend.src.Analisideicontenuti.contenuti import count_words_for_candidate
 
 
-def Tweets():
+def Tweets2():
     st.markdown("<h1 style='text-align: center; color: #4CAF50;'>Analisi dei Tweet per Candidati</h1>", unsafe_allow_html=True)
     input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Datasetparquet\\dataset\\dataset"
 
@@ -25,10 +25,11 @@ def Tweets():
             st.markdown(f"Analizzando il dataset in: **{input_path}**")
 
             with st.spinner("Elaborazione in corso..."):
+                # Passa il candidato come lista di parole chiave per la ricerca
                 candidate_keywords = [candidate]
-                results = count_words_for_candidate_in_chunks(input_path, candidate_keywords)
+                results = count_words_for_candidate(input_path, candidate_keywords)
 
-            if results is not None and not results.empty:
+            if results is not None:
                 st.success("Analisi completata con successo!")
                 st.markdown("### Risultati dell'analisi:")
                 st.dataframe(results)

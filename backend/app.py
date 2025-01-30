@@ -6,9 +6,8 @@ def get_spark_session():
     if "spark" not in st.session_state:
         st.session_state.spark = SparkSession.builder \
             .appName("BigData Application") \
-            .master("local[4]") \
+            .master("local[*]") \
             .config("spark.sql.shuffle.partitions", "100") \
-            .config("spark.sql.files.maxPartitionBytes", "128MB") \
             .getOrCreate()
     return st.session_state.spark
 

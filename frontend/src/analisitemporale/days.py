@@ -1,8 +1,8 @@
 from datetime import datetime
 import streamlit as st
-from Politica.backend.src.Analisitemporale.get_data_for_date import get_data_for_day
+from Politica.backend.src.Analisitemporale.days import get_data_for_day2
 
-def getDays():
+def getDays2():
     st.title("Analisi dei Tweet per Giorno")
 
     # Campo di input per la data
@@ -11,17 +11,12 @@ def getDays():
     # Menu a tendina per la selezione della data
     target_data = st.selectbox("Seleziona una data:", ottobre_2020)
 
-
-    chunk_size = st.slider("Seleziona il numero di righe da visualizzare per volta", min_value=5, max_value=50, step=5, value=10)
-
     # Opzione per selezionare cosa visualizzare
     view_option = st.selectbox("Cosa vuoi visualizzare?", ["Tweet del giorno", "Hashtags", "Numero di retweet", "All"])
 
     # Percorsi dei dati
-    #input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\subsetdataset\\dataset_sottoinsieme\\dataset_sottoinsieme" SUBSET
     input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Datasetparquet\\dataset\\dataset"
     output_path = "C:\\Users\\angel\\OneDrive\\Desktop\\TemporalAnalysis"
-
 
     # Variabili di sessione per risultati e indice
     if "result_df" not in st.session_state:
@@ -46,7 +41,7 @@ def getDays():
             return
 
         # Chiamata alla funzione backend
-        result_df = get_data_for_day(input_path, output_path, target_data_str)
+        result_df = get_data_for_day2(input_path, output_path, target_data_str)
 
         if result_df is None:
             st.error("Si è verificato un errore durante il recupero dei dati.")
@@ -74,6 +69,7 @@ def getDays():
         # Calcola il totale e l'indice corrente
         total_rows = result_df.count()
         start_index = st.session_state.current_index
+        chunk_size = 20  # Numero di righe da visualizzare alla volta
         end_index = min(start_index + chunk_size, total_rows)
 
         # Carica il chunk corrente e rimuove valori NA
@@ -88,5 +84,3 @@ def getDays():
         if end_index < total_rows:
             if st.button("Carica più dati"):
                 st.session_state.current_index = end_index
-
-
