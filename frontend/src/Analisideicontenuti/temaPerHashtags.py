@@ -1,7 +1,5 @@
-import matplotlib.pyplot as plt
 from collections import defaultdict
 import matplotlib.pyplot as plt
-import streamlit as st
 # Dizionario di parole chiave per i temi
 themes_keywords = {
     "politica": ["vote", "election", "president", "senate", "democracy", "campaign", "politics"],

@@ -1,13 +1,13 @@
-from Politica.backend.app import stop_spark_session, get_spark_session
 import streamlit as st
+from Politica.backend.app import stop_spark_session, get_spark_session
 from Politica.frontend.src.Analisidegliutenti.activity import user_activity2
 from Politica.frontend.src.Analisideicontenuti.counts import Tweets2
-from Politica.frontend.src.Analisideicontenuti.temaPerHashtags import analyze_hashtags, plot_pie_chart, themes_keywords
+from Politica.frontend.src.Analisideicontenuti.tema import analyze_hashtags, themes_keywords2, plot_pie_chart
 from Politica.frontend.src.Analisidelsentiment.sentiment import analisi2
 from Politica.frontend.src.analisitemporale.days import getDays2
 import pandas as pd
 
-#Avvio della SparkSession se non è già attiva
+# Avvio della SparkSession se non è già attiva
 def start_spark():
     if "spark" not in st.session_state:
         st.session_state.spark = get_spark_session()
@@ -59,11 +59,12 @@ def home():
     # Grafico a barre
     st.bar_chart(pd.DataFrame(hashtags, columns=["Hashtag", "Count"]).set_index("Hashtag"))
 
-    # Grafico a torta
-    st.subheader("Distribuzione Temi degli Hashtags")
-    file_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Big Data\\output\\hashtags_output.txt"
-    theme_counts = analyze_hashtags(file_path, themes_keywords)
-    plot_pie_chart(theme_counts)
+    # Solo quando Spark è attiva, mostra il grafico a torta
+    if st.session_state.get("spark_active", False):
+        st.subheader("Distribuzione Temi degli Hashtags")
+        file_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Big Data\\output\\hashtags_output.txt"
+        theme_counts = analyze_hashtags(file_path, themes_keywords2)
+        plot_pie_chart(theme_counts)
 
 # Menu di navigazione
 def main():
