@@ -21,7 +21,7 @@ def stop_spark():
     st.session_state.spark_active = False
 
 # UI principale
-st.title("Applicazione BigDataPolitica")
+st.title("Applicazione BigData Politica")
 
 # Se Spark non è attiva, mostra "Avvia App". Se è attiva, mostra "Stop App".
 if not st.session_state.get("spark_active", False):
@@ -74,7 +74,7 @@ def main():
 
     # Verifica se Spark è attiva prima di eseguire le funzioni
     if not st.session_state.get("spark_active", False):
-        st.error("Devi avviare l'app prima di eseguire una query!")
+        st.write("Devi avviare l'applicazione per poter accedere alle funzionalità!")
         return
 
     if menu == "Home":
