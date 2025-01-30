@@ -5,6 +5,7 @@ from Politica.frontend.src.Analisideicontenuti.counts import Tweets2
 from Politica.frontend.src.Analisideicontenuti.temaPerHashtags import analyze_hashtags, plot_pie_chart, themes_keywords
 from Politica.frontend.src.Analisidelsentiment.sentiment import analisi2
 from Politica.frontend.src.analisitemporale.days import getDays2
+import pandas as pd
 
 #Avvio della SparkSession se non è già attiva
 def start_spark():

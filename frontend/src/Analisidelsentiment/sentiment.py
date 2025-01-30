@@ -28,7 +28,7 @@ def analisi2():
     selected_candidate = st.selectbox("Seleziona un candidato", candidates)
 
     # Percorso del dataset
-    input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Datasetparquet\\dataset\\dataset"
+    input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\subsetdataset\\dataset_sottoinsieme\\dataset_sottoinsieme"
 
     if st.button("Esegui Analisi"):
         st.write(f"Analizzando i tweet per {selected_candidate}...")

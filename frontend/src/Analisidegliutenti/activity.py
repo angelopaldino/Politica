@@ -20,7 +20,7 @@ def user_activity2():
         # Mostra il messaggio di stato durante l'analisi
         with st.spinner("Sto eseguendo l'analisi..."):
             # Carica i dati di attività utente
-            input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Datasetparquet\\dataset\\dataset"
+            input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\subsetdataset\\dataset_sottoinsieme\\dataset_sottoinsieme"
             output_path = "C:\\Users\\angel\\OneDrive\\Desktop\\TemporalAnalysis"
 
             # Chiamata al backend per analizzare l'attività utente
