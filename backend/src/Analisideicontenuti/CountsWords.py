@@ -3,6 +3,7 @@ from pyspark.sql.types import StringType
 import re
 import math
 import os
+import streamlit as st
 from pyspark.sql import SparkSession
 import nltk
 from nltk.corpus import stopwords
@@ -23,12 +24,10 @@ stop_words = set(stopwords.words('english'))
 
 def count_words_for_candidate_in_chunks(input_path, candidate_keywords):
     chunk_size_percent = 3  # Aumenta la dimensione del chunk
-    spark = SparkSession.builder \
-        .appName("CountsWords") \
-        .master("local[4]") \
-        .config("spark.sql.shuffle.partitions", "100") \
-        .config("spark.sql.files.maxPartitionBytes", "128MB") \
-        .getOrCreate()
+    if "spark" not in st.session_state:
+        raise RuntimeError("Errore: SparkSession non è attiva. Premi 'Avvia App' per iniziarla.")
+    else:
+        spark = st.session_state.spark
 
     # Verifica che il percorso di input esista
     if not os.path.exists(input_path):

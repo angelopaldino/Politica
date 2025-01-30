@@ -1,3 +1,4 @@
+from pyspark.sql import SparkSession
 from Politica.backend.src.Analisidegliutenti.frequenzatweetutente import analyze_user_activity
 from Politica.backend.src.Analisitemporale.get_data_for_date import get_data_for_day
 from Politica.backend.src.data_io.visualizzazioneparquet import visualizzazioneParquet

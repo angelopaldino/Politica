@@ -1,17 +1,16 @@
 import math
 import os
+import streamlit as st
+
 import pandas as pd
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import count, col, max, first
 
 def analyze_user_activity(input_path, output_path):
-    # Creazione della sessione Spark con configurazioni ottimizzate
-    spark = SparkSession.builder \
-        .appName("User Activity Analysis") \
-        .master("local[4]") \
-        .config("spark.sql.shuffle.partitions", "100") \
-        .config("spark.sql.files.maxPartitionBytes", "128MB") \
-        .getOrCreate()
+    if "spark" not in st.session_state:
+        raise RuntimeError("Errore: SparkSession non è attiva. Premi 'Avvia App' per iniziarla.")
+    else:
+        spark = st.session_state.spark
 
     # Verifica che il percorso di input esista
     if not os.path.exists(input_path):

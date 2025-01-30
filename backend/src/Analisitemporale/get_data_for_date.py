@@ -2,17 +2,16 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, date_format
 import math
 import os
+import streamlit as st
 
 
 def get_data_for_day(input_path, output_path, target_data):
     chunk_size_percent = 2
     # Creazione della sessione Spark con configurazioni per il partizionamento e l'uso della memoria
-    spark = SparkSession.builder \
-        .appName("Get DATA for DATA") \
-        .master("local[4]") \
-        .config("spark.sql.shuffle.partitions", "100") \
-        .config("spark.sql.files.maxPartitionBytes", "128MB") \
-        .getOrCreate()
+    if "spark" not in st.session_state:
+        raise RuntimeError("Errore: SparkSession non è attiva. Premi 'Avvia App' per iniziarla.")
+    else:
+        spark = st.session_state.spark
 
     # Verifica che il percorso di input esista
     if not os.path.exists(input_path):

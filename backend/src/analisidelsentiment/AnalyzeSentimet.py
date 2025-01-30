@@ -1,6 +1,7 @@
 from pyspark.sql import SparkSession, functions as F
 import math
 import os
+import streamlit as st
 from pyspark.sql.types import DoubleType
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
@@ -27,12 +28,10 @@ def filter_tweets_by_candidate(df, candidate_keywords):
 
 # Funzione per elaborare i dati in chunk
 def process_in_chunks(input_path, output_path, candidate_keywords):
-    spark = SparkSession.builder \
-        .appName("Analisi del sentiment") \
-        .master("local[4]") \
-        .config("spark.sql.shuffle.partitions", "100") \
-        .config("spark.sql.files.maxPartitionBytes", "128MB") \
-        .getOrCreate()
+    if "spark" not in st.session_state:
+        raise RuntimeError("Errore: SparkSession non è attiva. Premi 'Avvia App' per iniziarla.")
+    else:
+        spark = st.session_state.spark
 
     # Verifica l'esistenza del percorso di input
     if not os.path.exists(input_path):
