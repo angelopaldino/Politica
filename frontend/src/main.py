@@ -8,11 +8,38 @@ from Politica.frontend.src.Analisideicontenuti.temaPerHashtags import analyze_ha
 import pandas as pd
 
 # Avvio della SparkSession se non è già attiva
-def ensure_spark_session():
+def start_spark():
     if "spark" not in st.session_state:
         st.session_state.spark = get_spark_session()
+        st.session_state.spark_active = True
 
-# Funzione per la home
+# Arresto della SparkSession
+def stop_spark():
+    stop_spark_session()
+    if "spark" in st.session_state:
+        del st.session_state.spark
+    st.session_state.spark_active = False
+
+# UI principale
+st.title("Applicazione BigDataPolitica")
+
+# Se Spark non è attiva, mostra "Avvia App". Se è attiva, mostra "Stop App".
+if not st.session_state.get("spark_active", False):
+    if st.button("Avvia App"):
+        start_spark()
+        st.experimental_rerun()  # Ricarica la pagina per aggiornare l'UI
+else:
+    if st.button("Stop App"):
+        stop_spark()
+        st.experimental_rerun()  # Ricarica la pagina per aggiornare l'UI
+    st.success("SparkSession attiva!")
+
+# Esempio di query
+if st.session_state.get("spark_active", False):
+    df = st.session_state.spark.createDataFrame([(1, "test")], ["id", "name"])
+    st.dataframe(df.toPandas())  # Usa toPandas() per mostrare i dati in Streamlit
+
+# Funzione per la home con la classifica
 def home():
     st.title("Benvenuto nell'app per le Elezioni Politiche in America 2k20")
     st.write("Seleziona una funzionalità dal menu a sinistra oppure esplora i 10 hashtag più popolari del mese!")
@@ -38,64 +65,28 @@ def home():
     theme_counts = analyze_hashtags(file_path, themes_keywords)
     plot_pie_chart(theme_counts)
 
-# UI principale
-st.title("Applicazione BigDataPolitica")
-
-# Pulsanti per avviare e fermare SparkSession
-col1, col2 = st.columns(2)
-with col1:
-    if st.button("Avvia App"):
-        ensure_spark_session()
-        st.success("SparkSession avviata!")
-
-with col2:
-    if st.button("Stop App"):
-        stop_spark_session()
-        if "spark" in st.session_state:
-            del st.session_state.spark
-        st.warning("SparkSession terminata!")
-
-# Esempio di query
-ensure_spark_session()  # Garantisce che Spark sia avviato prima di eseguire qualsiasi query
-if "spark" in st.session_state:
-    df = st.session_state.spark.createDataFrame([(1, "test")], ["id", "name"])
-    st.dataframe(df.toPandas())  # Usa toPandas() per mostrare i dati in Streamlit
-
-# Main Streamlit
+# Menu di navigazione
 def main():
     menu = st.sidebar.selectbox(
         "Scegli la funzionalità",
         ["Home", "Analisi Tweets", "Analisi Sentiment", "Tweets del giorno", "Analisi Attività Utente"]
     )
 
-    # Controllo Spark prima di eseguire una funzionalità
-    ensure_spark_session()
+    # Verifica se Spark è attiva prima di eseguire le funzioni
+    if not st.session_state.get("spark_active", False):
+        st.error("Devi avviare l'app prima di eseguire una query!")
+        return
 
     if menu == "Home":
-        if "spark" not in st.session_state:
-            st.error("Devi avviare l'app prima di eseguire una query!")
-        else:
-            home()
+        home()
     elif menu == "Analisi Tweets":
-        if "spark" not in st.session_state:
-            st.error("Devi avviare l'app prima di eseguire una query!")
-        else:
-            Tweets()
+        Tweets()
     elif menu == "Analisi Sentiment":
-        if "spark" not in st.session_state:
-            st.error("Devi avviare l'app prima di eseguire una query!")
-        else:
-            analisi()
+        analisi()
     elif menu == "Tweets del giorno":
-        if "spark" not in st.session_state:
-            st.error("Devi avviare l'app prima di eseguire una query!")
-        else:
-            getDays()
+        getDays()
     elif menu == "Analisi Attività Utente":
-        if "spark" not in st.session_state:
-            st.error("Devi avviare l'app prima di eseguire una query!")
-        else:
-            user_activity()
+        user_activity()
 
 if __name__ == "__main__":
     main()
