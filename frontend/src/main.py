@@ -34,10 +34,10 @@ else:
         st.experimental_rerun()  # Ricarica la pagina per aggiornare l'UI
     st.success("SparkSession attiva!")
 
-# Esempio di query
-if st.session_state.get("spark_active", False):
-    df = st.session_state.spark.createDataFrame([(1, "test")], ["id", "name"])
-    st.dataframe(df.toPandas())  # Usa toPandas() per mostrare i dati in Streamlit
+# Only debug
+#if st.session_state.get("spark_active", False):
+  #  df = st.session_state.spark.createDataFrame([(1, "test")], ["id", "name"])
+   # st.dataframe(df.toPandas())  # Usa toPandas() per mostrare i dati in Streamlit
 
 # Funzione per la home con la classifica
 def home():

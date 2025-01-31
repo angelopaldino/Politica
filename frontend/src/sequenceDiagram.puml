@@ -1,0 +1,20 @@
+@startuml
+actor Utente
+participant "Streamlit (Frontend)" as FE
+participant "Backend PySpark" as BE
+database "Dataset (Parquet/CSV)" as DB
+
+Utente -> FE : Seleziona candidato e parametri
+FE -> BE : Invia richiesta analisi
+BE -> DB : Legge dati filtrati
+DB --> BE : Restituisce dati
+BE -> BE : Analizza sentiment
+BE --> FE : Restituisce risultati
+FE -> Utente : Mostra risultati
+Utente -> FE : Clicca "Carica altro"
+FE -> BE : Richiede dati successivi
+BE -> DB : Legge altre righe
+DB --> BE : Restituisce nuovi dati
+BE --> FE : Invia nuovi dati
+FE -> Utente : Aggiorna visualizzazione
+@enduml

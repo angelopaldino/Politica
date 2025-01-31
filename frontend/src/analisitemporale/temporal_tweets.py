@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 import matplotlib.pyplot as plt
 from Politica.backend.src.Analisitemporale.tweet_temporali import tweet_per_temporalita
 import matplotlib.dates as mdates

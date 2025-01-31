@@ -3,6 +3,7 @@ from Politica.backend.app import stop_spark_session, get_spark_session
 from Politica.frontend.src.Analisidegliutenti.activity import user_activity2
 from Politica.frontend.src.Analisideicontenuti.counts import Tweets2
 from Politica.frontend.src.Analisideicontenuti.tema import analyze_hashtags, themes_keywords2, plot_pie_chart
+from Politica.frontend.src.Analisidelsentiment.all_candidates_sentiment import show_sentiment_graph
 from Politica.frontend.src.Analisidelsentiment.sentiment import analisi2
 from Politica.frontend.src.analisitemporale.days import getDays2
 import pandas as pd
@@ -38,10 +39,10 @@ else:
         st.experimental_rerun()  # Ricarica la pagina per aggiornare l'UI
     st.success("SparkSession attiva!")
 
-# Esempio di query
-if st.session_state.get("spark_active", False):
-    df = st.session_state.spark.createDataFrame([(1, "test")], ["id", "name"])
-    st.dataframe(df.toPandas())  # Usa toPandas() per mostrare i dati in Streamlit
+# only debug
+#if st.session_state.get("spark_active", False):
+ #   df = st.session_state.spark.createDataFrame([(1, "test")], ["id", "name"])
+  #  st.dataframe(df.toPandas())  # Usa toPandas() per mostrare i dati in Streamlit
 
 # Funzione per la home con la classifica
 def home():
@@ -74,7 +75,7 @@ def home():
 def main():
     menu = st.sidebar.selectbox(
         "Scegli la funzionalità",
-        ["Home", "Analisi Tweets", "Analisi Sentiment", "Tweets del giorno", "Analisi Attività Utente", "Mappa geografica dei Tweets", "Analisi del Numero di Tweet per Periodo"]
+        ["Home", "Analisi Tweets", "Analisi Sentiment", "Tweets del giorno", "Analisi Attività Utente", "Mappa geografica dei Tweets", "Analisi del Numero di Tweet per Periodo", "Guarda chi sta vincendo"]
     )
 
     # Verifica se Spark è attiva prima di eseguire le funzioni
@@ -97,6 +98,8 @@ def main():
         user_activity2()
     elif menu == "Analisi del Numero di Tweet per Periodo":
         show_tweet_analysis()
+    elif menu == "Guarda chi sta vincendo":
+        show_sentiment_graph()
 
 if __name__ == "__main__":
     main()
