@@ -34,7 +34,7 @@ def user_activity2():
                 st.session_state.user_activity_df = user_activity_df
                 st.session_state.start_row = 0  # Iniziamo dalla prima riga
                 st.write("Dati dell'attività utente:")
-                st.dataframe(user_activity_df.head(num_rows))  # Mostra le prime righe
+                #st.dataframe(user_activity_df.head(num_rows))  # Mostra le prime righe
 
     # Gestione della paginazione
     if 'user_activity_df' in st.session_state:
@@ -43,7 +43,8 @@ def user_activity2():
         end_row = start_row + num_rows
 
         # Mostra il dataframe paginato
-        st.write(user_activity_df.iloc[start_row:end_row])
+        st.dataframe(user_activity_df.iloc[start_row:end_row])  # Usa dataframe per maggiore controllo
+
 
         # Pulsante per caricare più righe
         if end_row < len(user_activity_df):

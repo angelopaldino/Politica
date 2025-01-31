@@ -30,7 +30,6 @@ def get_data_for_day2(input_path, output_path, target_data):
     # Leggi direttamente tutti i file Parquet in un unico DataFrame
     try:
         df = spark.read.parquet(*input_files)
-
         # Applica le trasformazioni (filtra per data e formatta created_at)
         df_transformed = df.withColumn("created_at_str", date_format(col("created_at"), "yyyy-MM-dd")) \
             .filter(col("created_at_str") == target_data)

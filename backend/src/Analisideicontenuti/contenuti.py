@@ -25,55 +25,43 @@ def count_words_for_candidate(input_path, candidate_keywords):
     else:
         spark = st.session_state.spark
 
-    # Verifica che il percorso di input esista
     if not os.path.exists(input_path):
         print(f"Errore: Il percorso di input non esiste: {input_path}")
         spark.stop()
         return None
 
-    # Ottieni la lista dei file Parquet nel percorso di input
     input_files = [os.path.join(input_path, f) for f in os.listdir(input_path) if f.endswith('.parquet')]
 
     try:
-        # Carica tutti i file Parquet in un DataFrame
         df = spark.read.parquet(*input_files)
 
-        # Verifica la presenza della colonna 'text'
         if "text" not in df.columns:
             print(f"Errore: La colonna 'text' non è presente nei dati")
             spark.stop()
             return None
 
-        # Estrai e pulisci il testo, poi filtra i tweet che menzionano i candidati
         df_filtered = filter_tweets_by_candidate(df, candidate_keywords)
 
-        # Se ci sono tweet dopo il filtro, analizza il testo
         if df_filtered.count() > 0:
-            # Applica la pulizia del testo direttamente alla colonna 'text'
             df_words = df_filtered.withColumn("cleaned_text", clean_text_udf(col("text")))
-
-            # Estrai le parole dalla colonna 'cleaned_text' pulita
             df_words = df_words.withColumn("words", explode(split(col("cleaned_text"), " ")))
-
-            # Filtra le stop words dalla colonna 'words'
             df_words_filtered = df_words.filter(~col("words").isin(stop_words))
-
-            # Aumenta il numero di partizioni per ottimizzare le prestazioni
             df_words_filtered = df_words_filtered.repartition(100)
-
-            # Conta la frequenza delle parole
             word_counts = df_words_filtered.groupBy("words").count().sort(col("count").desc())
 
-            # Raccogli i risultati e stampali
-            word_counts.show(10, truncate=False)
+            word_counts.show(10, truncate=False)  # Mostra i primi 10 risultati in console
+
+            # Converti il DataFrame Spark in Pandas per il frontend
+            return word_counts.toPandas()
 
         else:
             print("Nessun tweet trovato dopo il filtro per i candidati")
+            return None
 
     except Exception as e:
         print(f"Errore nel caricare o processare i dati: {e}")
+        return None
 
-    spark.stop()
 
 def filter_tweets_by_candidate(df, candidate_keywords):
     # Crea una condizione rlike per ogni parola chiave, con un match case-insensitive

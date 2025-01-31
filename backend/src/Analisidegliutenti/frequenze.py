@@ -1,6 +1,7 @@
 import os
 import streamlit as st
-from pyspark.sql.functions import count, col, max, first
+from pyspark.sql.functions import count, col, max, first, monotonically_increasing_id
+
 
 def analyze_user_activity2(input_path, output_path):
     if "spark" not in st.session_state:
@@ -58,7 +59,9 @@ def analyze_user_activity2(input_path, output_path):
         final_df_filtered = final_df.select("user_id_str", "tweet_count", "max_retweet_count", "max_favorite_count", "first_tweet_text")
 
         # Calcola l'indice di inizio e fine in base alla paginazione
-        final_df_filtered = final_df_filtered.orderBy("user_id_str").limit(15).offset(0)
+        final_df_filtered = final_df_filtered.withColumn("row_id", monotonically_increasing_id()) \
+            .filter(col("row_id").between(0, 14)) \
+            .drop("row_id")
 
         # Converte in Pandas DataFrame per Streamlit
         final_df_pd = final_df_filtered.toPandas()

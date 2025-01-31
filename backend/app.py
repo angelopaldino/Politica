@@ -7,7 +7,6 @@ def get_spark_session():
         st.session_state.spark = SparkSession.builder \
             .appName("BigData Application") \
             .master("local[*]") \
-            .config("spark.sql.shuffle.partitions", "100") \
             .getOrCreate()
     return st.session_state.spark
 

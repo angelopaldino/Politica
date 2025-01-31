@@ -4,8 +4,7 @@ import os
 import streamlit as st
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-os.environ['PYSPARK_PYTHON'] = 'C:/Users/angel/AppData/Local/Programs/Python/Python310/python.exe'
-os.environ['PYSPARK_DRIVER_PYTHON'] = 'C:/Users/angel/AppData/Local/Programs/Python/Python310/python.exe'
+
 
 analyzer = SentimentIntensityAnalyzer()
 

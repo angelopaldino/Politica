@@ -7,6 +7,10 @@ from Politica.frontend.src.Analisidelsentiment.sentiment import analisi2
 from Politica.frontend.src.analisitemporale.days import getDays2
 import pandas as pd
 
+from Politica.frontend.src.analisitemporale.temporal_tweets import show_tweet_analysis
+from Politica.frontend.src.geo.geocalizzazione import show_map
+
+
 # Avvio della SparkSession se non è già attiva
 def start_spark():
     if "spark" not in st.session_state:
@@ -70,7 +74,7 @@ def home():
 def main():
     menu = st.sidebar.selectbox(
         "Scegli la funzionalità",
-        ["Home", "Analisi Tweets", "Analisi Sentiment", "Tweets del giorno", "Analisi Attività Utente"]
+        ["Home", "Analisi Tweets", "Analisi Sentiment", "Tweets del giorno", "Analisi Attività Utente", "Mappa geografica dei Tweets", "Analisi del Numero di Tweet per Periodo"]
     )
 
     # Verifica se Spark è attiva prima di eseguire le funzioni
@@ -82,12 +86,17 @@ def main():
         home()
     elif menu == "Analisi Tweets":
         Tweets2()
+    elif menu == "Mappa geografica dei Tweets":
+        if st.button("Genera Mappa"):
+            show_map()
     elif menu == "Analisi Sentiment":
         analisi2()
     elif menu == "Tweets del giorno":
         getDays2()
     elif menu == "Analisi Attività Utente":
         user_activity2()
+    elif menu == "Analisi del Numero di Tweet per Periodo":
+        show_tweet_analysis()
 
 if __name__ == "__main__":
     main()
