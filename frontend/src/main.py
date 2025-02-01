@@ -27,7 +27,7 @@ st.title("Applicazione BigData Politica")
 if not st.session_state.get("spark_active", False):
     if st.button("Avvia App"):
         start_spark()
-        st.experimental_rerun()  # Ricarica la pagina per aggiornare l'UI
+        st.experimental_rerun()
 else:
     if st.button("Stop App"):
         stop_spark()
