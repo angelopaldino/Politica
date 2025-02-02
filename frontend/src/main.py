@@ -1,7 +1,7 @@
 import streamlit as st
 from Politica.backend.app import stop_spark_session, get_spark_session
 from Politica.frontend.src.Analisidegliutenti.activity import user_activity2
-from Politica.frontend.src.Analisidegliutenti.analisi_utente import f_utente
+from Politica.frontend.src.Analisidegliutenti.generals import generals
 from Politica.frontend.src.Analisideicontenuti.counts import Tweets2
 from Politica.frontend.src.Analisideicontenuti.tema import analyze_hashtags, themes_keywords2, plot_pie_chart
 from Politica.frontend.src.Analisidelsentiment.all_candidates_sentiment import show_sentiment_graph
@@ -10,6 +10,7 @@ from Politica.frontend.src.analisitemporale.days import getDays2
 import pandas as pd
 
 from Politica.frontend.src.analisitemporale.temporal_tweets import show_tweet_analysis
+from Politica.frontend.src.geo.fasce import fasce
 from Politica.frontend.src.geo.geocalizzazione import show_map
 
 
@@ -76,7 +77,7 @@ def home():
 def main():
     menu = st.sidebar.selectbox(
         "Scegli la funzionalità",
-        ["Home", "Analisi Tweets", "Analisi generali", "Analisi Sentiment", "Tweets del giorno", "Analisi Attività Utente", "Mappa geografica dei Tweets", "Analisi del Numero di Tweet per Periodo", "Guarda chi sta vincendo"]
+        ["Home", "Analisi Tweets", "Analisi generali", "Analisi lingue e posizione più comune",  "Analisi Sentiment", "Tweets del giorno", "Analisi Attività Utente", "Mappa geografica dei Tweets", "Analisi del Numero di Tweet per Periodo", "Guarda chi sta vincendo"]
     )
 
     # Verifica se Spark è attiva prima di eseguire le funzioni
@@ -93,6 +94,8 @@ def main():
             show_map()
     elif menu == "Analisi Sentiment":
         analisi2()
+    elif menu == "Analisi lingue e posizione più comune":
+        fasce()
     elif menu == "Tweets del giorno":
         getDays2()
     elif menu == "Analisi Attività Utente":
@@ -101,8 +104,8 @@ def main():
         show_tweet_analysis()
     elif menu == "Guarda chi sta vincendo":
         show_sentiment_graph()
-    elif menu == "Analisi utente":
-        f_utente()
+    elif menu == "Analisi generali":
+        generals()
 
 if __name__ == "__main__":
     main()
