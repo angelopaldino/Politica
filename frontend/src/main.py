@@ -1,11 +1,17 @@
 import streamlit as st
-from Politica.backend.app import get_spark_session, stop_spark_session
-from Politica.frontend.src.Analisideicontenuti.CountWords import Tweets
-from Politica.frontend.src.Analisidelsentiment.sentimentAnalysis import analisi, plot_pie_chart
-from Politica.frontend.src.analisitemporale.getDays import getDays
-from Politica.frontend.src.Analisidegliutenti.user_activity import user_activity
-from Politica.frontend.src.Analisideicontenuti.temaPerHashtags import analyze_hashtags, themes_keywords
+from Politica.backend.app import stop_spark_session, get_spark_session
+from Politica.frontend.src.Analisidegliutenti.activity import user_activity2
+from Politica.frontend.src.Analisidegliutenti.analisi_utente import f_utente
+from Politica.frontend.src.Analisideicontenuti.counts import Tweets2
+from Politica.frontend.src.Analisideicontenuti.tema import analyze_hashtags, themes_keywords2, plot_pie_chart
+from Politica.frontend.src.Analisidelsentiment.all_candidates_sentiment import show_sentiment_graph
+from Politica.frontend.src.Analisidelsentiment.sentiment import analisi2
+from Politica.frontend.src.analisitemporale.days import getDays2
 import pandas as pd
+
+from Politica.frontend.src.analisitemporale.temporal_tweets import show_tweet_analysis
+from Politica.frontend.src.geo.geocalizzazione import show_map
+
 
 # Avvio della SparkSession se non è già attiva
 def start_spark():
@@ -27,17 +33,17 @@ st.title("Applicazione BigData Politica")
 if not st.session_state.get("spark_active", False):
     if st.button("Avvia App"):
         start_spark()
-        st.experimental_rerun()
+        st.experimental_rerun()  # Ricarica la pagina per aggiornare l'UI
 else:
     if st.button("Stop App"):
         stop_spark()
         st.experimental_rerun()  # Ricarica la pagina per aggiornare l'UI
     st.success("SparkSession attiva!")
 
-# Only debug
+# only debug
 #if st.session_state.get("spark_active", False):
-  #  df = st.session_state.spark.createDataFrame([(1, "test")], ["id", "name"])
-   # st.dataframe(df.toPandas())  # Usa toPandas() per mostrare i dati in Streamlit
+ #   df = st.session_state.spark.createDataFrame([(1, "test")], ["id", "name"])
+  #  st.dataframe(df.toPandas())  # Usa toPandas() per mostrare i dati in Streamlit
 
 # Funzione per la home con la classifica
 def home():
@@ -59,17 +65,18 @@ def home():
     # Grafico a barre
     st.bar_chart(pd.DataFrame(hashtags, columns=["Hashtag", "Count"]).set_index("Hashtag"))
 
-    # Grafico a torta
-    st.subheader("Distribuzione Temi degli Hashtags")
-    file_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Big Data\\output\\hashtags_output.txt"
-    theme_counts = analyze_hashtags(file_path, themes_keywords)
-    plot_pie_chart(theme_counts)
+    # Solo quando Spark è attiva, mostra il grafico a torta
+    if st.session_state.get("spark_active", False):
+        st.subheader("Distribuzione Temi degli Hashtags")
+        file_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Big Data\\output\\hashtags_output.txt"
+        theme_counts = analyze_hashtags(file_path, themes_keywords2)
+        plot_pie_chart(theme_counts)
 
 # Menu di navigazione
 def main():
     menu = st.sidebar.selectbox(
         "Scegli la funzionalità",
-        ["Home", "Analisi Tweets", "Analisi Sentiment", "Tweets del giorno", "Analisi Attività Utente"]
+        ["Home", "Analisi Tweets", "Analisi generali", "Analisi Sentiment", "Tweets del giorno", "Analisi Attività Utente", "Mappa geografica dei Tweets", "Analisi del Numero di Tweet per Periodo", "Guarda chi sta vincendo"]
     )
 
     # Verifica se Spark è attiva prima di eseguire le funzioni
@@ -80,13 +87,22 @@ def main():
     if menu == "Home":
         home()
     elif menu == "Analisi Tweets":
-        Tweets()
+        Tweets2()
+    elif menu == "Mappa geografica dei Tweets":
+        if st.button("Genera Mappa"):
+            show_map()
     elif menu == "Analisi Sentiment":
-        analisi()
+        analisi2()
     elif menu == "Tweets del giorno":
-        getDays()
+        getDays2()
     elif menu == "Analisi Attività Utente":
-        user_activity()
+        user_activity2()
+    elif menu == "Analisi del Numero di Tweet per Periodo":
+        show_tweet_analysis()
+    elif menu == "Guarda chi sta vincendo":
+        show_sentiment_graph()
+    elif menu == "Analisi utente":
+        f_utente()
 
 if __name__ == "__main__":
     main()
