@@ -11,7 +11,7 @@ import pandas as pd
 
 from Politica.frontend.src.analisitemporale.temporal_tweets import show_tweet_analysis
 from Politica.frontend.src.geo.fasce import fasce
-from Politica.frontend.src.geo.geocalizzazione import show_map
+from Politica.frontend.src.geo.geolocalizzazione import show_map
 
 
 # Avvio della SparkSession se non è già attiva

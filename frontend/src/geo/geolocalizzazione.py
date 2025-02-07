@@ -2,7 +2,7 @@ import streamlit as st
 import pydeck as pdk
 import os
 import pandas as pd
-from Politica.backend.src.geo.geocalizzazione import geo
+from Politica.backend.src.geo.geolocalizzazione import geo
 
 # Funzione per mostrare la mappa
 def show_map():
