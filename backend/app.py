@@ -8,6 +8,8 @@ def get_spark_session():
             .appName("BigData Application") \
             .master("local[*]") \
             .getOrCreate()
+            #.config("spark.driver.memory", "6g") \
+            #.config("spark.executor.memory", "6g") \
     return st.session_state.spark
 
 # Funzione per chiudere SparkSession
