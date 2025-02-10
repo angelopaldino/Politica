@@ -10,7 +10,7 @@ def geo(data_path):
     else:
         spark = st.session_state.spark
 
-    # Verifica se il percorso esiste
+
     if not os.path.exists(data_path):
         print(f"Errore: Il percorso di input non esiste: {data_path}")
         return None
@@ -24,25 +24,25 @@ def geo(data_path):
         print(f"Errore: Percorso di input non trovato: {data_path}")
         return None
 
-    # Leggi i file Parquet
+
     df = spark.read.parquet(*input_files)
 
-    # Filtra i dati geografici validi
+
     df_geo = df.filter(
         (col("place_lat").isNotNull()) & (col("place_lon").isNotNull())
     ).select("place_name", "place_lat", "place_lon")
 
-    # Conta i tweet per luogo
+
     df_grouped = df_geo.groupBy("place_name", "place_lat", "place_lon").agg(
         count("place_name").alias("tweet_count")
     )
 
-    # Converti in Pandas per Streamlit
+
     try:
-        # Codice di lettura e analisi del DataFrame
+
         df_pandas = df_grouped.toPandas()
 
-        # Gestione dei valori 'NA' e conversione in float
+
         df_pandas["place_lat"] = df_pandas["place_lat"].replace('NA', np.nan)
         df_pandas["place_lon"] = df_pandas["place_lon"].replace('NA', np.nan)
 

@@ -33,37 +33,34 @@ def analyze_hashtags(file_path, themes_keywords):
 
     return theme_counts2
 
-# Funzione per visualizzare i risultati in un grafico a torta migliorato
+
 def plot_pie_chart(theme_counts):
     # Preparazione dei dati
     labels = list(theme_counts.keys())
     sizes = list(theme_counts.values())
 
-    # Definisci una colormap per i colori (più variegati e vivaci)
-    colormap = plt.cm.get_cmap('Set3', len(labels))  # 'Set3' è una buona colormap
+
+    colormap = plt.cm.get_cmap('Set3', len(labels))
     colors = [colormap(i) for i in range(len(labels))]  # Assegna un colore unico per ogni tema
 
     # Crea il grafico a torta
     plt.figure(figsize=(10, 7))  # Aggiungi figsize per dimensioni personalizzate
     wedges, _, autotexts = plt.pie(sizes, autopct='%1.1f%%', startangle=140, colors=colors, wedgeprops={'edgecolor': 'black', 'linewidth': 1.5}, explode=(0.1, 0, 0, 0))  # Effetto "esplosione"
 
-    # Migliora l'aspetto del grafico a torta
+
     for autotext in autotexts:
         autotext.set_fontsize(14)  # Aumenta la dimensione del font per le percentuali
         autotext.set_weight('bold')  # Rendi il testo in grassetto per maggiore visibilità
         autotext.set_color('white')  # Colore bianco per il testo delle percentuali per un buon contrasto
 
-    #for text in texts:
-    #    text.set_fontsize(14)  # Aumenta la dimensione del font per le etichette
-    #    text.set_weight('bold')  # Rendi il testo in grassetto
-    #    text.set_color('black')  # Colore del testo per le etichette
 
-    # Aggiungi il titolo
+
+
     plt.title('Distribuzione Temi degli Hashtags', fontsize=16, fontweight='bold')
 
-    # Aggiungi una legenda
+
     plt.legend(wedges, labels, title="Temi", loc="upper right", fontsize=10)
 
-    # Visualizza il grafico direttamente in Streamlit
+
     st.pyplot(plt)
 

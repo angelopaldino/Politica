@@ -38,25 +38,25 @@ def plot_pie_chart(theme_counts):
     labels = list(theme_counts.keys())
     sizes = list(theme_counts.values())
 
-    # Definisci i colori
+
     colors = ['red','blue','green','black']
 
-    # Crea il grafico a torta
-    plt.figure(figsize=(8, 6))  # Aggiungi figsize per dimensioni personalizzate
+
+    plt.figure(figsize=(8, 6))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors, wedgeprops={'edgecolor': 'black'})
 
-    # Aggiungi il titolo
+
     plt.title('Distribuzione Temi degli Hashtags')
 
-    # Visualizza il grafico
-    plt.axis('equal')  # Assicura che il grafico a torta sia circolare
+
+    plt.axis('equal')
 
 
 
 # Percorso del file txt contenente gli hashtag e i loro conteggi
 file_path = "C:\\Users\\angel\\OneDrive\\Desktop\\Big Data\\output\\hashtags_output.txt"
 
-# Analizza gli hashtag e ottieni i conteggi per tema
+
 theme_counts = analyze_hashtags(file_path, themes_keywords)
 
 # Visualizza il grafico a torta

@@ -8,15 +8,14 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 analyzer = SentimentIntensityAnalyzer()
 
-# Funzione per analizzare il sentiment
 def analyze_sentiment(text):
     if not text:
-        return 0.0  # Restituisce un valore predefinito per input nulli
+        return 0.0
 
     score = analyzer.polarity_scores(text)
-    return score.get('compound', 0.0)  # Restituisce 0.0 se 'compound' non esiste
+    return score.get('compound', 0.0)
 
-# Funzione per filtrare i tweet per candidato
+
 def filter_tweets_by_candidate(df, candidate_keywords):
     conditions = [F.lower(F.col("text")).contains(kw.lower()) for kw in candidate_keywords]
     combined_condition = conditions.pop(0)
@@ -24,29 +23,29 @@ def filter_tweets_by_candidate(df, candidate_keywords):
         combined_condition |= condition
     return df.filter(combined_condition)
 
-# Funzione per elaborare l'intero dataset
+
 def process_data2(input_path, candidate_keywords):
     if "spark" not in st.session_state:
         raise RuntimeError("Errore: SparkSession non è attiva. Premi 'Avvia App' per iniziarla.")
     else:
         spark = st.session_state.spark
 
-    # Verifica l'esistenza del percorso di input
+
     if not os.path.exists(input_path):
         print(f"Errore: Il percorso di input non esiste: {input_path}")
         return None
 
-    # Leggi l'intero dataset
+
     df = spark.read.parquet(input_path)
 
-    # Filtro i tweet per il candidato
+
     df_filtered = filter_tweets_by_candidate(df, candidate_keywords)
 
     if df_filtered.count() == 0:
         print(f"Nessun tweet trovato per il candidato.")
         return None
 
-    # Aggiungi colonna di sentiment
+
     sentiment_udf = F.udf(analyze_sentiment, returnType=DoubleType())
     df_filtered = df_filtered.withColumn('sentiment', sentiment_udf(F.col('text')))
 
@@ -68,7 +67,7 @@ def process_data2(input_path, candidate_keywords):
     for row in sentiment_counts.collect():
         sentiment_results[row['sentiment_label']] = row['count'] # trasformo il df in una lista di righe
 
-    # Calcola le percentuali di sentiment
+
     sentiment_percentages = {
         'positive': (sentiment_results['positive'] / total_tweets) * 100,
         'neutral': (sentiment_results['neutral'] / total_tweets) * 100,

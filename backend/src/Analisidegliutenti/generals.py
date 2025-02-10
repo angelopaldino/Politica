@@ -9,13 +9,13 @@ def f(input_path):
     else:
         spark = st.session_state.spark
 
-    # Verifica che il percorso di input esista
+
     if not os.path.exists(input_path):
         print(f"Errore: Il percorso di input non esiste: {input_path}")
         spark.stop()
         return None
 
-        # Ottieni la lista dei file Parquet nel percorso di input
+
     try:
         input_files = [os.path.join(input_path, f) for f in os.listdir(input_path) if f.endswith('.parquet')]
         if not input_files:
@@ -42,7 +42,7 @@ def fascia_utente(input_path):
 
 def utenti_piu_taggati(input_path):
     df = f(input_path)
-    df_filtered = df.filter(F.col("in_reply_to_screen_name")!="NA")  # Escludi gli utenti NA
+    df_filtered = df.filter(F.col("in_reply_to_screen_name")!="NA")
     df_grouped = df_filtered.groupBy("in_reply_to_screen_name") \
         .agg(F.count("*").alias("count")) \
         .orderBy("count", ascending=False)
@@ -50,17 +50,17 @@ def utenti_piu_taggati(input_path):
 
 
 def post_da_utente(input_path, username=""):
-    # Carica il DataFrame
+
     df = f(input_path)
 
-    # Filtro per 'screen_name' diverso da "NA" e opzionale filtro per username
+
     df_filtered = df.filter(F.col("screen_name") != "NA")
 
     if username:
-        # Converte sia 'screen_name' che la keyword a minuscolo per il confronto insensibile al caso
+
         df_filtered = df_filtered.filter(F.lower(F.col("screen_name")).contains(username.lower()))
 
-    # Verifica quante righe ci sono dopo il filtro
+
     print(f"Numero di righe filtrate: {df_filtered.count()}")
 
     return df_filtered

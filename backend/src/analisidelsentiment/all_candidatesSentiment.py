@@ -7,7 +7,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 analyzer = SentimentIntensityAnalyzer()
 
-# Funzione per analizzare il sentiment
+
 def analyze_sentiment(text):
     if not text:
         return 0.0  # Restituisce un valore predefinito per input nulli
@@ -30,12 +30,12 @@ def get_sentiment_for_candidates(input_path, candidates):
     else:
         spark = st.session_state.spark
 
-    # Verifica l'esistenza del percorso di input
+
     if not os.path.exists(input_path):
         print(f"Errore: Il percorso di input non esiste: {input_path}")
         return None
 
-    # Leggi l'intero dataset
+
     df = spark.read.parquet(input_path)
 
     sentiment_data = {}

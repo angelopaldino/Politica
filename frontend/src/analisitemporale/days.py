@@ -5,20 +5,20 @@ from Politica.backend.src.Analisitemporale.days import get_data_for_day2
 def getDays2():
     st.title("Analisi dei Tweet per Giorno")
 
-    # Campo di input per la data
+
     ottobre_2020 = [f"2020-10-{str(i).zfill(2)}" for i in range(1, 32)]
 
-    # Menu a tendina per la selezione della data
+
     target_data = st.selectbox("Seleziona una data:", ottobre_2020)
 
-    # Opzione per selezionare cosa visualizzare
+
     view_option = st.selectbox("Cosa vuoi visualizzare?", ["Tweet del giorno", "Hashtags", "Numero di retweet", "All"])
 
-    # Percorsi dei dati
+
     input_path = "C:\\Users\\angel\\OneDrive\\Desktop\\subsetdataset\\dataset_sottoinsieme\\dataset_sottoinsieme"
     output_path = "C:\\Users\\angel\\OneDrive\\Desktop\\TemporalAnalysis"
 
-    # Variabili di sessione per risultati e indice
+
     if "result_df" not in st.session_state:
         st.session_state.result_df = None
     if "current_index" not in st.session_state:
@@ -77,7 +77,7 @@ def getDays2():
         result_df_pandas = result_df_pandas.iloc[start_index:end_index]
         result_df_pandas = result_df_pandas.dropna(how="any")
 
-        # Mostra i dati in una tabella
+
         st.dataframe(result_df_pandas, use_container_width=True)
 
         # Aggiorna l'indice corrente

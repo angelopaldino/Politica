@@ -13,10 +13,10 @@ def clean_text(text):
     text = re.sub(r'\s+', ' ', text).strip()
     return text
 
-# Registra la funzione UDF in Spark
+# Registro la funzione UDF in Spark
 clean_text_udf = udf(clean_text, StringType())
 
-# Carica le stop words in inglese
+# Carico le stop words in inglese
 stop_words = set(stopwords.words('english'))
 
 def count_words_for_candidate(input_path, candidate_keywords):
@@ -51,7 +51,7 @@ def count_words_for_candidate(input_path, candidate_keywords):
 
             word_counts.show(10, truncate=False)  # Mostra i primi 10 risultati in console
 
-            # Converti il DataFrame Spark in Pandas per il frontend
+
             return word_counts.toPandas()
 
         else:
@@ -67,15 +67,15 @@ def filter_tweets_by_candidate(df, candidate_keywords):
     # Crea una condizione rlike per ogni parola chiave, con un match case-insensitive
     conditions = [col("text").rlike(f"(?i){kw}") for kw in candidate_keywords]
 
-    # Applica la condizione combinando le condizioni con "or"
+
     combined_condition = conditions.pop(0)
     for condition in conditions:
         combined_condition |= condition
 
-    # Filtra i tweet che soddisfano una delle condizioni
+
     filtered_df = df.filter(combined_condition)
 
-    # Se non ci sono tweet dopo il filtro, stampa un messaggio
+
     if filtered_df.count() == 0:
         print("Nessun tweet trovato per i candidati.")
     else:

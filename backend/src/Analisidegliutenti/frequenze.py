@@ -9,13 +9,13 @@ def analyze_user_activity2(input_path, output_path):
     else:
         spark = st.session_state.spark
 
-    # Verifica che il percorso di input esista
+
     if not os.path.exists(input_path):
         print(f"Errore: Il percorso di input non esiste: {input_path}")
         spark.stop()
         return None
 
-    # Ottieni la lista dei file Parquet nel percorso di input
+
     try:
         input_files = [os.path.join(input_path, f) for f in os.listdir(input_path) if f.endswith('.parquet')]
         if not input_files:
@@ -27,11 +27,11 @@ def analyze_user_activity2(input_path, output_path):
         spark.stop()
         return None
 
-    # Leggi tutti i file Parquet in un singolo DataFrame
+
     try:
         df = spark.read.parquet(*input_files)
 
-        # Filtra i dati non validi (nulli o non numerici)
+        # Filtro i dati non validi (nulli o non numerici)
         df_filtered = df.filter(
             col("retweet_count").isNotNull() &
             col("favorite_count").isNotNull() &
@@ -47,29 +47,29 @@ def analyze_user_activity2(input_path, output_path):
             first("text").alias("first_tweet_text")  # Aggiungi il testo del primo tweet per ogni utente
         )
 
-        # Scrivi i risultati in un file di output
+
         output_result = os.path.join(output_path, "user_activity.parquet")
         user_activity.write.parquet(output_result, mode="overwrite")
         print(f"Scrittura dei dati completata nel file {output_result}.")
 
-        # Carica i file Parquet in un DataFrame finale
+
         final_df = spark.read.parquet(output_result)
 
-        # Seleziona solo le colonne necessarie
+
         final_df_filtered = final_df.select("user_id_str", "tweet_count", "max_retweet_count", "max_favorite_count", "first_tweet_text")
 
-        # Calcola l'indice di inizio e fine in base alla paginazione
+
         final_df_filtered = final_df_filtered.withColumn("row_id", monotonically_increasing_id()) \
             .filter(col("row_id").between(0, 14)) \
             .drop("row_id")
 
-        # Converte in Pandas DataFrame per Streamlit
+
         final_df_pd = final_df_filtered.toPandas()
 
         print("Esempio di dati nel DataFrame Pandas:", final_df_pd.head())
         print("Colonne disponibili:", final_df_pd.columns)
 
-        # Restituisci il DataFrame Pandas
+
         return final_df_pd
 
     except Exception as e:
