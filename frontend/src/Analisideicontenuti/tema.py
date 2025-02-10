@@ -11,31 +11,31 @@ themes_keywords2 = {
     "health": ["health", "fitness", "medicine", "wellness", "mentalhealth", "nutrition", "exercise"],
 }
 
-# Funzione per determinare il tema di un hashtag
+
 def classify_hashtag(hashtag, themes_keywords):
     hashtag = hashtag.lower().strip()
     for theme, keywords in themes_keywords.items():
         if any(keyword in hashtag for keyword in keywords):
             return theme
-    return None  # Se non corrisponde a nessun tema
+    return None
 
-# Funzione per analizzare il file txt e classificare gli hashtag
+
 def analyze_hashtags(file_path, themes_keywords):
-    theme_counts2 = defaultdict(int)  # Conta gli hashtag per tema
+    theme_counts2 = defaultdict(int)
 
     with open(file_path, 'r', encoding='utf-8') as file:
         for line in file:
-            hashtag, count = line.strip().split(',')  # Supponiamo che ogni riga sia "hashtag,count"
+            hashtag, count = line.strip().split(',')
             theme = classify_hashtag(hashtag, themes_keywords)
 
             if theme:
-                theme_counts2[theme] += int(count)  # Incrementa il conteggio per il tema
+                theme_counts2[theme] += int(count)
 
     return theme_counts2
 
 
 def plot_pie_chart(theme_counts):
-    # Preparazione dei dati
+
     labels = list(theme_counts.keys())
     sizes = list(theme_counts.values())
 

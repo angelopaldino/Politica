@@ -60,12 +60,12 @@ def process_data2(input_path, candidate_keywords):
     # Calcola il numero di sentimenti
     sentiment_counts = df_filtered.groupBy('sentiment_label').count()
 
-    # Raccogli i risultati
+
     sentiment_results = {'positive': 0, 'neutral': 0, 'negative': 0}
     total_tweets = df_filtered.count()
 
     for row in sentiment_counts.collect():
-        sentiment_results[row['sentiment_label']] = row['count'] # trasformo il df in una lista di righe
+        sentiment_results[row['sentiment_label']] = row['count']
 
 
     sentiment_percentages = {

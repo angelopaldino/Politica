@@ -30,7 +30,7 @@ def f(input_path):
 
 def fascia_linguistica(input_path):
     df = f(input_path)
-    df_filtered = df.filter(F.col("lang")!="NA")  # Escludi gli utenti NA
+    df_filtered = df.filter(F.col("lang")!="NA")
     df_grouped = df_filtered.groupBy("lang") \
         .agg(F.count("*").alias("count")) \
         .orderBy("count", ascending=False)

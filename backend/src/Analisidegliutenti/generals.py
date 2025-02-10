@@ -33,7 +33,7 @@ def fascia_utente(input_path):
     df = f(input_path)
     df_filtered = df.filter(
         F.col("user_id_str").isNotNull() &
-        F.col("screen_name").isNotNull()  # Corretto
+        F.col("screen_name").isNotNull()
     )
     df_grouped = df_filtered.groupBy("user_id_str", "screen_name") \
         .agg(F.count("*").alias("count")) \

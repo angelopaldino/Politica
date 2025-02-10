@@ -4,14 +4,14 @@ import os
 import pandas as pd
 from Politica.backend.src.geo.geolocalizzazione import geo
 
-# Funzione per mostrare la mappa
+
 def show_map():
     st.title("Mappa dei Tweet Geolocalizzati")
     st.write("Questa sezione ti permette di visualizzare i tweet in base alla loro geolocalizzazione.")
-    # Percorso dei dati
+
     data_path = "C:\\Users\\angel\\OneDrive\\Desktop\\subsetdataset\\dataset_sottoinsieme\\dataset_sottoinsieme"
 
-    # Avvia l'analisi dei dati geografici
+
     df_geo = geo(data_path)
 
     # Verifica se ci sono dati disponibili
@@ -31,7 +31,7 @@ def show_map():
         st.error("Dati geografici non validi o incompleti.")
         return
 
-    # Mostra una breve descrizione della funzionalità
+
     st.write(
         "Questa mappa mostra la geolocalizzazione dei tweet analizzati, "
         "visualizzando la distribuzione dei tweet in base alle coordinate geografiche."

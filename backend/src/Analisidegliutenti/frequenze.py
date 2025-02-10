@@ -41,10 +41,10 @@ def analyze_user_activity2(input_path, output_path):
 
         # Analisi dei dati:
         user_activity = df_filtered.groupBy("user_id_str").agg(
-            count("tweet_id").alias("tweet_count"),  # Conteggio dei tweet per utente
+            count("tweet_id").alias("tweet_count"),
             max("retweet_count").alias("max_retweet_count"),
             max("favorite_count").alias("max_favorite_count"),
-            first("text").alias("first_tweet_text")  # Aggiungi il testo del primo tweet per ogni utente
+            first("text").alias("first_tweet_text")
         )
 
 
