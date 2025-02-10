@@ -35,8 +35,9 @@ def get_data_for_day2(input_path, output_path, target_data):
             .filter(col("created_at_str") == target_data)
 
         # Scrivi il DataFrame trasformato nel percorso di output
-        df_transformed.write.parquet(output_path, mode="overwrite")
-        print(f"Scrittura del DataFrame trasformato completata: {output_path}")
+        #only debug
+        #df_transformed.write.parquet(output_path, mode="overwrite")
+        #print(f"Scrittura del DataFrame trasformato completata: {output_path}")
 
         return df_transformed
 

@@ -40,7 +40,7 @@ def tweet_per_temporalita(data_path):
     # Conta i record prima del filtro
     print(f"Numero di record prima del filtro: {df.count()}")
 
-    # Filtra i tweet solo per ottobre (considera solo le date tra 01/10 e 31/10)
+    # Filtra i tweet solo per ottobre (considero solo le date tra 01/10 e 31/10)
     df = df.filter((col('created_at').between('2020-10-01', '2020-10-31')))
 
     # Conta i record dopo il filtro

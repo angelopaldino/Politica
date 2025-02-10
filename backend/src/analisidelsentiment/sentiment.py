@@ -66,7 +66,7 @@ def process_data2(input_path, candidate_keywords):
     total_tweets = df_filtered.count()
 
     for row in sentiment_counts.collect():
-        sentiment_results[row['sentiment_label']] = row['count']
+        sentiment_results[row['sentiment_label']] = row['count'] # trasformo il df in una lista di righe
 
     # Calcola le percentuali di sentiment
     sentiment_percentages = {
